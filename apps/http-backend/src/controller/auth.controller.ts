@@ -6,9 +6,10 @@ export const authController={
     userSignup: async(req:Request,res:Response)=>{
         const data = signupSchema.safeParse(req.body);
         if(!data.success){
-            return res.status(400).json({
+            res.status(400).json({
                 message:"incorrect inputs"
             })
+            return;
         }
     },
     userLogin: async(req:Request,res:Response)=>{
