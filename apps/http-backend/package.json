@@ -9,18 +9,18 @@
     "build": "tsc -b"
   },
   "devDependencies": {
+    "@repo/backend-common": "*",
+    "@repo/common": "*",
+    "@repo/db": "*",
     "@repo/typescript-config": "*",
     "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@repo/backend-common": "*",
-    "@repo/common":"*",
-    "@repo/db":"*"
+    "@types/jsonwebtoken": "^9.0.10"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "zod": "^4.4.3"
-    
   },
   "keywords": [],
   "author": "",

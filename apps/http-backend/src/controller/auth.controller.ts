@@ -3,6 +3,7 @@ import { JWT_SECRET } from "@repo/backend-common/config";
 import jwt from "jsonwebtoken";
 import { loginSchema, signupSchema } from "@repo/common/types";
 import { prismaClient } from "@repo/db/client";
+import bcrypt from "bcryptjs";
 export const authController = {
   userSignup: async (req: Request, res: Response) => {
     const data = signupSchema.safeParse(req.body);
@@ -23,11 +24,12 @@ export const authController = {
         success: "false",
       });
     }
+    const hashedPass = await bcrypt.hash(data.data.password,10);
     const user = await prismaClient.user.create({
       data: {
         email: data.data.email,
         name: data.data.name,
-        password: data.data.password,
+        password: hashedPass,
       },
     });
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
@@ -52,17 +54,25 @@ export const authController = {
             success:"false"
         })
     }
-
+    
     const user = await prismaClient.user.findUnique({
         where:{
             email:data.data.email
         }
     })
+
     if(!user){
         return res.status(401).json({
             success:"false",
             message:"User not found"
         })
+    }
+    const isPasswordValid = await bcrypt.compare(data.data.password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: "false",
+        message: "Invalid credentials",
+      });
     }
     const token = jwt.sign({userId:user.id},JWT_SECRET,{expiresIn:"3d"})
     return res.status(200).json({
