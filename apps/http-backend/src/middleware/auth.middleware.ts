@@ -17,6 +17,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
             message: "Unauthorized access, token is missing"
         })
     }
+    
     try {
         if (!JWT_SECRET)
             return res.status(500).json({
@@ -29,7 +30,8 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                 message: "Unauthorized access, invalid token"
             })
         }
-        return next();
+        req.userId=decoded.userId;
+        next();
     } catch (error) {
         return res.status(401).json({
             message: "Unauthorized access, invalid token"

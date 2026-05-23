@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
     "dev": "npm run build && npm run start",
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "start": "node --env-file=.env ./dist/index.js"
   },
   "devDependencies": {
     "@repo/backend-common": "*",
@@ -14,7 +14,8 @@
     "@repo/db": "*",
     "@repo/typescript-config": "*",
     "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10"
+    "@types/jsonwebtoken": "^9.0.10",
+    "tsx": "^4.22.3"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

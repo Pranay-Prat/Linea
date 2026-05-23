@@ -4,20 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "npm run build && npm run start",
     "build": "tsc -b",
-    "start": "node ./dist/index.js",
-    "dev": "npm run build && npm run start"
+    "start": "node --env-file=.env ./dist/index.js"
   },
   "devDependencies": {
+    "@repo/backend-common": "*",
     "@repo/typescript-config": "*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ws": "^8.18.1",
-    "@repo/backend-common": "*"
+    "tsx": "^4.22.3"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.3",
     "ws": "^8.20.0"
-    
   },
   "keywords": [],
   "author": "",

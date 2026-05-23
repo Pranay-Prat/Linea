@@ -1,14 +1,53 @@
-import { Response,Request } from "express"
-import { createRoomSchema } from "@repo/common/types"
-export const roomController={
-    createRoom:(req:Request,res:Response)=>{
-        const data = createRoomSchema.safeParse(req.body);
-        if(!data.success){
-            res.status(400).json({
-                message:"incorrect inputs"
-            })
-            return;
-        }
+import { Response, Request } from "express";
+import { createRoomSchema } from "@repo/common/types";
+import { prismaClient } from "@repo/db/client";
 
+export const roomController = {
+  createRoom: async (req: Request, res: Response) => {
+    try {
+      const data = createRoomSchema.safeParse(req.body);
+
+      if (!data.success) {
+        return res.status(400).json({
+          message: "incorrect inputs",
+        });
+      }
+
+      const userId = req.userId;
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "unauthorised",
+        });
+      }
+
+      const slug =
+        data.data.roomName
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, "-") +
+        "-" +
+        Math.random().toString(36).substring(2, 7);
+
+      const room = await prismaClient.room.create({
+        data: {
+          slug: slug,
+          adminId: userId,
+        },
+      });
+
+      return res.status(201).json({
+        message: "Room created successfully",
+        success: "true",
+        roomId: room.id,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        message: "Failed to create room",
+        success: "false",
+      });
     }
-}
+  },
+};
