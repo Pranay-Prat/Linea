@@ -50,4 +50,31 @@ export const roomController = {
       });
     }
   },
+  getRoom: async(req:Request, res:Response)=>{
+    try {
+      const slug = req.params.slug as string;
+      const room = await prismaClient.room.findUnique({
+        where:{
+          slug:slug
+        }
+      })
+      if(!room){
+        return res.status(404).json({
+          message: "Room not found",
+          success: "false",
+        });
+      }
+      return res.status(200).json({
+        message: "Room found successfully",
+        success: "true",
+        room,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        message: "Failed to get room",
+        success: "false",
+      });
+    }
+  }
 };
