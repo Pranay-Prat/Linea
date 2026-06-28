@@ -9,13 +9,14 @@
     "start": "node --env-file=.env ./dist/index.js"
   },
   "devDependencies": {
-    "@repo/backend-common": "*",
     "@repo/typescript-config": "*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ws": "^8.18.1",
     "tsx": "^4.22.3"
   },
   "dependencies": {
+    "@repo/backend-common": "*",
+    "@repo/db": "*",
     "jsonwebtoken": "^9.0.3",
     "ws": "^8.20.0"
   },
