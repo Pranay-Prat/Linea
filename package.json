@@ -2,10 +2,11 @@
   "name": "Linea",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "npm run format:check && npm run lint && turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,scss,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,scss,yml,yaml}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
