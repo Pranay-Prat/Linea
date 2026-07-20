@@ -14,3 +14,16 @@ export const createRoomSchema= z.object({
 export type signupType = z.infer<typeof signupSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type createRoomType = z.infer<typeof createRoomSchema>
+
+export type ElementType = "rectangle" | "ellipse" | "arrow" | "line" | "freedraw";
+
+export type WhiteboardElement = {
+    id: string;
+    type: ElementType;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    strokeColor: string;
+    seed: number;
+};
