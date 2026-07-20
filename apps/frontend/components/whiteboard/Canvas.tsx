@@ -3,19 +3,11 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import rough from "roughjs";
 import { useWhiteboardStore } from "../../stores/whiteboardStore";
 import { initDraw } from "../../lib/initDraw";
-import { WhiteboardElement } from "../../types/whiteboard";
+import { WhiteboardElement } from "@repo/common/types";
 
-export default function Canvas() {
+export default function Canvas({ roomId }: { roomId: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const { 
-        elements, 
-        action, 
-        selectedTool, 
-        setElements, 
-        addElement, 
-        updateElement, 
-        setAction 
-    } = useWhiteboardStore();
+    const {elements, action, selectedTool, setElements, addElement, updateElement, setAction} = useWhiteboardStore();
     useEffect(() => {
         const handleResize = () => {
             const canvas = canvasRef.current;
@@ -25,7 +17,6 @@ export default function Canvas() {
                 setElements([...useWhiteboardStore.getState().elements]);
             }
         };
-
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -33,13 +24,11 @@ export default function Canvas() {
     useLayoutEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         initDraw(canvas, elements);
     }, [elements]);
 
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
         const { clientX, clientY } = e;
-        
         if (selectedTool === "rectangle" || selectedTool === "ellipse" || selectedTool === "line" || selectedTool === "arrow") {
             setAction("drawing");
             const newElement: WhiteboardElement = {
@@ -50,11 +39,11 @@ export default function Canvas() {
                 width: 0,
                 height: 0,
                 strokeColor: "white",
+                seed: Math.floor(Math.random() * 2 ** 31),
             };
             addElement(newElement);
         }
     };
-
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (action === "drawing") {
             const { clientX, clientY } = e;
@@ -67,11 +56,9 @@ export default function Canvas() {
             });
         }
     };
-
     const handlePointerUp = () => {
         setAction("none");
     };
-
     return (
         <canvas
             ref={canvasRef}

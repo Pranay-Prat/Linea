@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { WhiteboardElement, ElementType } from "../types/whiteboard";
+import { WhiteboardElement, ElementType } from "@repo/common/types";
 export type WhiteboardAction =
     | "none"
     | "drawing"
@@ -27,7 +27,7 @@ interface WhiteboardState {
 export const useWhiteboardStore = create<WhiteboardState>((set) => ({
     elements: [],
     action: "none",
-    selectedTool: "rectangle",
+    selectedTool: "ellipse",
     selectedElementIds: [],
 
     setElements: (elements) => set({ elements }),

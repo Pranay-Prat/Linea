@@ -1,5 +1,5 @@
-import { RoughCanvas } from "roughjs/bin/canvas";
-import { WhiteboardElement } from "../types/whiteboard";
+import type { RoughCanvas } from "roughjs/bin/canvas";
+import { WhiteboardElement } from "@repo/common/types";
 
 export const drawElement = (rc: RoughCanvas, element: WhiteboardElement) => {
     switch (element.type) {
@@ -8,6 +8,7 @@ export const drawElement = (rc: RoughCanvas, element: WhiteboardElement) => {
                 stroke: element.strokeColor,
                 strokeWidth: 2,
                 roughness: 1, // Rough.js sketchy style intensity
+                seed: element.seed,
             });
             break;
         case "ellipse":
@@ -21,6 +22,7 @@ export const drawElement = (rc: RoughCanvas, element: WhiteboardElement) => {
                     stroke: element.strokeColor,
                     strokeWidth: 2,
                     roughness: 1,
+                    seed: element.seed,
                 }
             );
             break;
@@ -34,6 +36,7 @@ export const drawElement = (rc: RoughCanvas, element: WhiteboardElement) => {
                     stroke: element.strokeColor,
                     strokeWidth: 2,
                     roughness: 1,
+                    seed: element.seed,
                 }
             );
             break;

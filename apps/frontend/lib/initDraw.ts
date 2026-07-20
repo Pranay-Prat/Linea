@@ -1,5 +1,5 @@
 import rough from "roughjs";
-import { WhiteboardElement } from "../types/whiteboard";
+import { WhiteboardElement } from "@repo/common/types";
 import { drawElement } from "./drawElement";
 
 export const initDraw = (
