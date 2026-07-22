@@ -1,28 +1,20 @@
-import { prismaClient } from "@repo/db/client";
 import { Response, Request } from "express";
-export const chatController={
-   getChats: async (req: Request, res: Response) => {
-  try {
-    const roomId = Number(req.params.roomId);
+import { chatService } from "../services/chat.service";
 
-    const messages = await prismaClient.chat.findMany({
-      where: {
-        roomId
-      },
-      orderBy: {
-        id: "desc"
-      },
-      take: 50
-    });
+export const chatController = {
+  getChats: async (req: Request, res: Response) => {
+    try {
+      const roomId = Number(req.params.roomId);
+      const messages = await chatService.getMessagesByRoomId(roomId);
 
-    res.json({
-      messages
-    });
+      res.json({
+        messages
+      });
 
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to fetch chats"
-    });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to fetch chats"
+      });
+    }
   }
-}
-}
+};

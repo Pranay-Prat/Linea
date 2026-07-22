@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import rough from "roughjs";
 import { useWhiteboardStore } from "../../stores/whiteboardStore";
 import { initDraw } from "../../lib/initDraw";
-import { WhiteboardElement } from "@repo/common/types";
+import { WhiteboardElement, ElementType } from "@repo/common/types";
 
 export default function Canvas({ roomId }: { roomId: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +29,7 @@ export default function Canvas({ roomId }: { roomId: string }) {
 
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
         const { clientX, clientY } = e;
-        if (selectedTool === "rectangle" || selectedTool === "ellipse" || selectedTool === "line" || selectedTool === "arrow") {
+        if (selectedTool === ElementType.RECTANGLE || selectedTool === ElementType.ELLIPSE || selectedTool === ElementType.LINE || selectedTool === ElementType.ARROW) {
             setAction("drawing");
             const newElement: WhiteboardElement = {
                 id: Date.now().toString(),

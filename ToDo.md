@@ -9,7 +9,7 @@ Linea is a real-time collaborative whiteboard and chat monorepo built with Turbo
 | **Frontend** | `apps/frontend` | Next.js 16 + React 19 + Tailwind v4 + Zustand | Port 3002 | Whiteboard canvas (`Canvas.tsx`, `whiteboardStore.ts`, `drawElement.ts`, `initDraw.ts`) active. Axios configured in `lib/axios.ts`. |
 | **HTTP Backend** | `apps/http-backend` | Express + JWT + Prisma | Port 3001 | Auth (`auth.controller.ts`), Room (`room.controller.ts`), and Chat (`chat.controller.ts`) endpoints configured. |
 | **WS Backend** | `apps/ws-backend` | `ws` library + Prisma | Port 8080 | Real-time WebSocket messaging server (`src/index.ts`). |
-| **Database** | `packages/db` | Prisma + PostgreSQL | Database Schema | Models: `User`, `Room`, `RoomMember`, `Chat`, `WhiteboardElement`. Client exported from `@repo/db/client`. |
+| **Database** | `packages/db` | Prisma + PostgreSQL | Database Schema | Models: `User`, `Room`, `Chat`. Client exported from `@repo/db/client`. |
 | **Backend Common** | `packages/backend-common` | TypeScript | Shared Config | Exports `JWT_SECRET`, `HTTP_BACKEND_URL`, `WS_BACKEND_URL`. |
 | **Common** | `packages/common` | Zod | Shared Schemas | Auth & Room Zod validation schemas (`packages/common/src/types.ts`). |
 
@@ -86,7 +86,7 @@ Linea/
     ├── db/                             ← Prisma Database Package
     │   ├── package.json
     │   ├── prisma/
-    │   │   └── schema.prisma           ← Models: User, Room, RoomMember, Chat, WhiteboardElement
+    │   │   └── schema.prisma           ← Models: User, Room, Chat, WhiteboardScene, WhiteboardElement
     │   └── src/
     │       └── index.ts                ← Exports prismaClient instance (@repo/db/client)
     ├── backend-common/                 ← Shared Backend Environment & Secrets
@@ -138,15 +138,10 @@ No JWT tokens are stored in `localStorage` or handled manually by client JavaScr
 
 ### Phase 1: Database & Shared Packages (`packages/db`, `packages/common`, `packages/backend-common`)
 
-- [x] **Extend Prisma Schema (`packages/db/prisma/schema.prisma`)**
-  - Added `WhiteboardElement` model for storing drawings & canvas elements
-  - Added `RoomMember` model with role (`ADMIN`, `MEMBER`, `VIEWER`)
-  - Added Enums: `ElementType`, `StrokeStyle`, `FillStyle`, `Role`
-  - Added `version`, `versionNonce`, and `isDeleted` for real-time LWW conflict resolution
-  - Added `createdAt` and `updatedAt` timestamps across models
-- [ ] **Generate Prisma Client & Run Migration (`packages/db`)**
-  - Run `npx prisma migrate dev --name init_whiteboard_schema`
-  - Run `npx prisma generate`
+- [ ] **Extend Prisma Schema (`packages/db/prisma/schema.prisma`)**
+  - Add `WhiteboardScene` model (linked to `Room`)
+  - Add `WhiteboardElement` model with attributes: `type`, `x`, `y`, `width`, `height`, `strokeColor`, `backgroundColor`, `strokeWidth`, `strokeStyle`, `fillStyle`, `roughness`, `opacity`, `points`, `text`, `version`, `versionNonce`, `isDeleted`
+  - Run `npx prisma migrate dev` / `npx prisma generate`
 - [ ] **Extend Shared Schemas (`packages/common/src/types.ts`)**
   - Add Zod schemas and TypeScript types for `WhiteboardElement` and WebSocket event payloads (`join_room`, `leave_room`, `chat`, `draw_element`, `delete_element`)
 - [ ] **Verify Common Backend Environment Config (`packages/backend-common/src/index.ts`)**

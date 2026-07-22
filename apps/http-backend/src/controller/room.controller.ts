@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { createRoomSchema } from "@repo/common/types";
-import { prismaClient } from "@repo/db/client";
+import { roomService } from "../services/room.service";
 
 export const roomController = {
   createRoom: async (req: Request, res: Response) => {
@@ -21,20 +21,7 @@ export const roomController = {
         });
       }
 
-      const slug =
-        data.data.roomName
-          .toLowerCase()
-          .trim()
-          .replace(/\s+/g, "-") +
-        "-" +
-        Math.random().toString(36).substring(2, 7);
-
-      const room = await prismaClient.room.create({
-        data: {
-          slug: slug,
-          adminId: userId,
-        },
-      });
+      const room = await roomService.createRoom(data.data.roomName, userId);
 
       return res.status(201).json({
         message: "Room created successfully",
@@ -50,20 +37,19 @@ export const roomController = {
       });
     }
   },
-  getRoom: async(req:Request, res:Response)=>{
+  
+  getRoom: async (req: Request, res: Response) => {
     try {
       const slug = req.params.slug as string;
-      const room = await prismaClient.room.findUnique({
-        where:{
-          slug:slug
-        }
-      })
-      if(!room){
+      const room = await roomService.getRoomBySlug(slug);
+      
+      if (!room) {
         return res.status(404).json({
           message: "Room not found",
           success: "false",
         });
       }
+      
       return res.status(200).json({
         message: "Room found successfully",
         success: "true",

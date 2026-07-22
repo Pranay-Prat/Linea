@@ -27,7 +27,7 @@ interface WhiteboardState {
 export const useWhiteboardStore = create<WhiteboardState>((set) => ({
     elements: [],
     action: "none",
-    selectedTool: "ellipse",
+    selectedTool: ElementType.ELLIPSE,
     selectedElementIds: [],
 
     setElements: (elements) => set({ elements }),
@@ -35,7 +35,7 @@ export const useWhiteboardStore = create<WhiteboardState>((set) => ({
     updateElement: (id, updatedElement) =>
         set((state) => ({
             elements: state.elements.map((el) =>
-                el.id === id ? { ...el, ...updatedElement } : el
+                el.id === id ? ({ ...el, ...updatedElement } as WhiteboardElement) : el
             ),
         })),
     setAction: (action) => set({ action }),

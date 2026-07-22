@@ -10,8 +10,8 @@ function isAuthTokenPayload(
 ): decoded is AuthTokenPayload {
     return typeof decoded !== "string" && typeof decoded.userId === "string";
 }
-export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-    const token = req.headers.authorization?.split(" ")[1];
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+    const token = req.cookies["linea-token"];
     if (!token) {
         return res.status(401).json({
             message: "Unauthorized access, token is missing"
