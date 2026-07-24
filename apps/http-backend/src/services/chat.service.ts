@@ -9,7 +9,15 @@ export const chatService = {
       orderBy: {
         id: "desc"
       },
-      take: limit
+      take: limit,
+      include:{
+        user:{
+          select:{
+            id:true,
+            name:true
+          }
+        }
+      }
     });
   }
 };
